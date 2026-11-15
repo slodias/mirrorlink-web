@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>MirrorLink TV Test</title><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{background:#111;color:#fff;font-family:Arial,sans-serif;padding:20px}h1{color:#78c4ff}p{font-size:23px}b{color:#ffdc7c}</style></head>
+<body><h1>MirrorLink - Samsung TV Test</h1><p>HTML: <b>OK</b></p><p id="js">JavaScript: <b>YOK</b></p><p id="rtc">WebRTC: <b>YOK</b></p><p id="video">HTML5 Video: <b>YOK</b></p><p id="h264">H264: <b>Bilinmiyor</b></p><p id="ws">WebSocket: <b>YOK</b></p><p id="https">Protokol: <b>?</b></p>
+<script type="text/javascript">
+(function(){function line(id,msg){document.getElementById(id).innerHTML=msg}
+line('js','JavaScript: <b>OK</b>');
+line('rtc','WebRTC: <b>'+(typeof window.RTCPeerConnection!=='undefined'||typeof window.webkitRTCPeerConnection!=='undefined'?'VAR':'YOK')+'</b>');
+var v=document.createElement('video');line('video','HTML5 Video: <b>'+(typeof v.canPlayType==='function'?'VAR':'YOK')+'</b>');
+if(v.canPlayType){line('h264','H264: <b>'+(v.canPlayType('video/mp4; codecs="avc1.42E01E"')||'YOK')+'</b>')}
+line('ws','WebSocket: <b>'+(typeof window.WebSocket!=='undefined'?'VAR':'YOK')+'</b>');
+line('https','Protokol: <b>'+location.protocol+'</b>');
+})();
+</script></body></html>
