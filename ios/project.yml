@@ -12,15 +12,23 @@ targets:
     platform: iOS
     sources:
       - path: MirrorLink
+    info:
+      path: MirrorLink/Info.plist
+      properties:
+        CFBundleDisplayName: MirrorLink
+        NSLocalNetworkUsageDescription: "Samsung TV'nin DLNA bağlantısını test etmek için yerel ağ erişimi gerekir."
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+          NSAllowsArbitraryLoads: true
+        UILaunchScreen:
+          UIColorName: ""
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sedkar.mirrorlink
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: MirrorLink
-        INFOPLIST_KEY_NSLocalNetworkUsageDescription: "Samsung TV ile yerel ağda bağlantıyı test etmek için izin gerekir."
-        INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
         TARGETED_DEVICE_FAMILY: "1"
         SUPPORTS_MACCATALYST: NO
-    scheme:
-      testTargets: []
+    scheme: {}
