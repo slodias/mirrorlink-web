@@ -1,0 +1,5 @@
+MirrorLink iOS build status
+Build step: success
+Workflow run: https://github.com/slodias/mirrorlink-web/actions/runs/43770840733
+Checked at (UTC): 2026-11-15 22:44:05
+Note: unsigned simulator build, not an iPhone-installable IPA.
