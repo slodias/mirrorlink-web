@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>MirrorLink Legacy TV</title></head>
+<body bgcolor="#ffffff" text="#000000">
+<h1>MirrorLink TV - Basic Test</h1>
+<p>HTML: OK</p>
+<p id="js">JavaScript: NOT WORKING</p>
+<p id="rtc">WebRTC: NOT WORKING</p>
+<p id="vid">HTML5 VIDEO: NOT WORKING</p>
+<p id="mp4">H264: UNKNOWN</p>
+<p id="ws">WebSocket: NOT WORKING</p>
+<p id="proto">Protocol: UNKNOWN</p>
+<script type="text/javascript">
+(function(){
+function set(id,val){document.getElementById(id).innerHTML=val;}
+set("js","JavaScript: OK");
+var rtc=(typeof window.RTCPeerConnection != "undefined" || typeof window.webkitRTCPeerConnection != "undefined" || typeof window.mozRTCPeerConnection != "undefined");
+set("rtc","WebRTC: "+(rtc?"YES":"NO"));
+var v=document.createElement("video");var has=typeof v.canPlayType === "function";
+set("vid","HTML5 VIDEO: "+(has?"YES":"NO"));
+if(has){set("mp4","H264: "+(v.canPlayType('video/mp4; codecs="avc1.42E01E"')||"NO"));}
+set("ws","WebSocket: "+(typeof window.WebSocket === "function" ? "YES" : "NO"));
+set("proto","Protocol: "+location.protocol);
+})();
+</script>
+</body></html>
