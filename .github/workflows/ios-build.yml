@@ -1,0 +1,38 @@
+name: MirrorLink iOS simulator build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ios/**'
+      - '.github/workflows/ios-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate --spec ios/project.yml --project ios
+      - name: Build unsigned iOS Simulator app
+        run: |
+          xcodebuild -project ios/MirrorLink.xcodeproj \
+            -scheme MirrorLink \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath /tmp/mirrorlink-build \
+            CODE_SIGNING_ALLOWED=NO build
+      - name: Upload simulator-only artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MirrorLink-iOS-Simulator-only
+          path: /tmp/mirrorlink-build/Build/Products/Debug-iphonesimulator/MirrorLink.app
+          if-no-files-found: error
+          retention-days: 7
