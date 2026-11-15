@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -22,6 +22,7 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate --spec ios/project.yml --project ios
       - name: Build unsigned iOS Simulator app
+        id: simulator_build
         run: |
           xcodebuild -project ios/MirrorLink.xcodeproj \
             -scheme MirrorLink \
@@ -36,3 +37,24 @@ jobs:
           path: /tmp/mirrorlink-build/Build/Products/Debug-iphonesimulator/MirrorLink.app
           if-no-files-found: error
           retention-days: 7
+      - name: Publish build status to repository
+        if: always()
+        env:
+          BUILD_OUTCOME: ${{ steps.simulator_build.outcome }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          mkdir -p ci-reports
+          {
+            echo "MirrorLink iOS build status"
+            echo "Build step: $BUILD_OUTCOME"
+            echo "Workflow run: https://github.com/slodias/mirrorlink-web/actions/runs/$RUN_ID"
+            echo "Checked at (UTC): $(date -u +'%Y-%m-%d %H:%M:%S')"
+            echo "Note: unsigned simulator build, not an iPhone-installable IPA."
+          } > ci-reports/ios-build.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ci-reports/ios-build.txt
+          git diff --cached --quiet && exit 0
+          git commit -m "Report iOS simulator build result"
+          git pull --rebase origin main
+          git push origin HEAD:main
